@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { View, ScrollView, StyleSheet, Image } from 'react-native';
-import { TextInput, Button, Title, Subheading, Snackbar, Picker } from 'react-native-paper';
+import { TextInput, Button, Title, Subheading, Snackbar, Text } from 'react-native-paper';
+import { Picker } from '@react-native-picker/picker';
+import * as DocumentPicker from 'expo-document-picker';
 
 
 function Merchant() {
@@ -18,6 +20,11 @@ function Merchant() {
     const [pricingCatalogue, setPricingCatalogue] = useState('');
     const [visible, setVisible] = useState(false);
     const [error, setError] = useState('');
+    const [selectedLocation, setSelectedLocation] = useState('Location 1 - Nairobi');
+    const [selectedStreet, setSelectedStreet] = useState('Street 1A');
+    const [selectedShop, setSelectedShop] = useState('Shop 1');
+    const [pickedDocument, setPickedDocument] = useState(null);
+
 
     const handleSubmission = () => {
         if (
@@ -76,6 +83,44 @@ function Merchant() {
         closeMenu();
       };
 
+      const locations = [
+        'Location 1 - Nairobi',
+        'Location 2 - Nairobi',
+        'Location 3 - Nairobi',
+        'Location 4 - Nairobi',
+        'Location 5 - Nairobi',
+      ];
+    
+      const streets = {
+        'Location 1 - Nairobi': ['Street 1A', 'Street 1B', 'Street 1C', 'Street 1D', 'Street 1E'],
+        'Location 2 - Nairobi': ['Street 2A', 'Street 2B', 'Street 2C', 'Street 2D', 'Street 2E'],
+        'Location 3 - Nairobi': ['Street 3A', 'Street 3B', 'Street 3C', 'Street 3D', 'Street 3E'],
+        'Location 4 - Nairobi': ['Street 4A', 'Street 4B', 'Street 4C', 'Street 4D', 'Street 4E'],
+        'Location 5 - Nairobi': ['Street 5A', 'Street 5B', 'Street 5C', 'Street 5D', 'Street 5E'],
+      };
+    
+      const shopNames = ['Shop 1', 'Shop 2', 'Shop 3', 'Shop 4', 'Shop 5'];
+
+      const pickDocument = async () => {
+        try {
+          const result = await DocumentPicker.getDocumentAsync({
+            type: 'application/pdf', // You can specify the allowed file types here, e.g., 'application/pdf', 'image/*'
+          });
+    
+          if (result.type === 'success') {
+            setPickedDocument(result);
+          } else {
+            if (result.type === 'cancel') {
+              console.log('Document picking was canceled');
+            } else {
+              console.error('Failed to pick a document');
+            }
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      };
+
   return (
     <ScrollView>
         <View style={styles.container}>
@@ -89,10 +134,45 @@ function Merchant() {
         <TextInput label="Phone Number" value={phoneNumber} onChangeText={text => setPhoneNumber(text)} style={styles.input} />
 
         <Subheading>Business Location</Subheading>
-        <TextInput label="Field of Location" value={location} onChangeText={text => setLocation(text)} style={styles.input} />
+
+        <Picker
+          selectedValue={selectedLocation}
+          onValueChange={(itemValue) => setSelectedLocation(itemValue)}
+          >
+          {locations.map((location) => (
+            <Picker.Item key={location} label={location} value={location} />
+            ))}
+        </Picker>
+            <Text>Selected Location: {selectedLocation}</Text>
+
+        <Picker
+          selectedValue={selectedStreet}
+          onValueChange={(itemValue) => setSelectedStreet(itemValue)}
+        >
+          {streets[selectedLocation].map((street) => (
+            <Picker.Item key={street} label={street} value={street} />
+          ))}
+        </Picker>
+
+        <Text>Selected Street: {selectedStreet}</Text>
+
+        <Picker
+          selectedValue={selectedShop}
+          onValueChange={(itemValue) => setSelectedShop(itemValue)}
+        >
+          {shopNames.map((shopName) => (
+            <Picker.Item key={shopName} label={shopName} value={shopName} />
+          ))}
+        </Picker>
+
+      
+      
+      <Text>Selected Shop: {selectedShop}</Text>
+
+        {/* <TextInput label="Field of Location" value={location} onChangeText={text => setLocation(text)} style={styles.input} />
         <TextInput label="Select Street" value={street} onChangeText={text => setStreet(text)} style={styles.input} />
         <TextInput label="Building & Shop Number" value={building} onChangeText={text => setBuilding(text)} style={styles.input} />
-        <TextInput label="Select Business/Service Offered" value={shopNumber} onChangeText={text => setShopNumber(text)} style={styles.input} />
+        <TextInput label="Select Business/Service Offered" value={shopNumber} onChangeText={text => setShopNumber(text)} style={styles.input} /> */}
 
         {/* <Subheading>Business Type</Subheading>
       <TextInput label="Business Type" value={businessType} onChangeText={text => setBusinessType(text)} style={styles.input} />
@@ -113,6 +193,16 @@ function Merchant() {
       <TextInput label="Field to upload Business Logo" value={businessLogo} onChangeText={text => setBusinessLogo(text)} style={styles.input} />
       <TextInput label="Field to upload Pricing Catalogue" value={pricingCatalogue} onChangeText={text => setPricingCatalogue(text)} style={styles.input} />
 
+      <Button mode='contained' textColor='white' title="Pick a Document" onPress={pickDocument} />
+      {pickedDocument && (
+        <View>
+          <Text>Selected Document:</Text>
+          <Text>Name: {pickedDocument.name}</Text>
+          <Text>Size: {pickedDocument.size} bytes</Text>
+          <Text>Type: {pickedDocument.type}</Text>
+        </View>
+      )}
+       
       <Button mode="contained" onPress={handleSubmission} style={styles.button} textColor='white'>
         Submit
       </Button>

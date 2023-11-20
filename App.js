@@ -3,6 +3,9 @@ import { StyleSheet, Text, View } from 'react-native';
 import { PaperProvider } from 'react-native-paper';
 import Login from './screens/Login';
 import Merchant from './screens/Merchant';
+import OrderPlacement from './screens/OrderPlacement';
+import WelcomeScreen from './screens/WelcomeScreen';
+import DashboardScreen from './screens/DashboardScreen';
 
 export default function App() {
 
@@ -18,7 +21,10 @@ export default function App() {
   return (
     <PaperProvider theme={theme}>
       {/* <Login /> */}
-      <Merchant />
+      {/* <Merchant /> */}
+      {/* <OrderPlacement /> */}
+      {/* <WelcomeScreen /> */}
+      <DashboardScreen />
     </PaperProvider>
   );
 }

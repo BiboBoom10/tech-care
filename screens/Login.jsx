@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react'
 import { useEffect } from 'react';
 import { useState } from 'react';
@@ -12,6 +13,8 @@ function Login() {
     const [emailError, setEmailError] = useState(null);
     const [passwordError, setPasswordError] = useState(null);
 
+    const navigation = useNavigation();
+
     const handleLogin = () => {
         if (email.trim() === '' || password.trim() === '') {
             setEmailError('Email cannot be empty');
@@ -22,6 +25,7 @@ function Login() {
             return;
           }
           setVisible(true);
+          navigation.navigate('DashboardScreen')
     }
 
   return (
@@ -73,7 +77,7 @@ function Login() {
         onPress: () => setVisible(false),
       }}
     >
-      Login logic will be implemented here.
+      You have successfully Logged in
     </Snackbar>
   </View>
   )

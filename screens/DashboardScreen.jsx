@@ -1,29 +1,31 @@
 import React from 'react';
+import { ScrollView } from 'react-native';
 import { View, StyleSheet, Image } from 'react-native';
 import { Title, Button, Card, Paragraph } from 'react-native-paper';
 
 const DashboardScreen = ({ navigation }) => {
   const handleBookRepair = () => {
     // Navigate to the repair booking screen
-    navigation.navigate('ServiceCategories');
+    navigation.navigate('OrderPlacement');
   };
 
   const handleTrackRepair = () => {
     // Navigate to the repair tracking screen
-    navigation.navigate('RepairTracking');
+    navigation.navigate('TrackRepair');
   };
 
   const handleViewBookings = () => {
     // Navigate to the bookings history screen
-    navigation.navigate('BookingHistory');
+    navigation.navigate('RecentBookings');
   };
 
   const handleContactSupport = () => {
     // Navigate to the contact support screen or implement your support functionality
-    // navigation.navigate('ContactSupport');
+    navigation.navigate('Contacts');
   };
 
   return (
+    <ScrollView>
     <View style={styles.container}>
 
     <View style={styles.logoContainer}>
@@ -72,6 +74,7 @@ const DashboardScreen = ({ navigation }) => {
         </Card.Actions>
       </Card>
     </View>
+    </ScrollView>
   );
 };
 

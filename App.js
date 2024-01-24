@@ -13,6 +13,8 @@ import RecentBookings from './screens/RecentBookings';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Profile from './screens/Profile';
+import AdminDashboard from './screens/AdminDashboard';
+import UserManagement from './screens/UserManagement';
 
 const Stack = createNativeStackNavigator();
 
@@ -29,7 +31,7 @@ export default function App() {
 
   return (
     <PaperProvider theme={theme}>
-      {/* <NavigationContainer>
+      <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen name="Home" options={{ headerShown: false }} component={WelcomeScreen} />
           <Stack.Screen name="Login" component={Login} />
@@ -41,17 +43,7 @@ export default function App() {
           <Stack.Screen name="Contacts" component={Contacts} />
           <Stack.Screen name="RecentBookings" component={RecentBookings} />
         </Stack.Navigator>
-      </NavigationContainer> */}
-      {/* <Login /> */}
-      {/* <SignUp /> */}
-      {/* <Merchant /> */}
-      {/* <OrderPlacement /> */}
-      {/* <WelcomeScreen /> */}
-      {/* <DashboardScreen /> */}
-      {/* <TrackRepair /> */}
-      {/* <Contacts /> */}
-      {/* <RecentBookings /> */}
-      <Profile />
+      </NavigationContainer>
     </PaperProvider>
   );
 }

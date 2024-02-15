@@ -3,7 +3,7 @@ import { ScrollView } from 'react-native';
 import { View, StyleSheet, Image } from 'react-native';
 import { Title, Button, Card, Paragraph } from 'react-native-paper';
 
-const DashboardScreen = ({ navigation }) => {
+const DashboardScreen = ({ navigation, route }) => {
   const handleBookRepair = () => {
     // Navigate to the repair booking screen
     navigation.navigate('OrderPlacement');
@@ -12,6 +12,7 @@ const DashboardScreen = ({ navigation }) => {
   const handleTrackRepair = () => {
     // Navigate to the repair tracking screen
     navigation.navigate('TrackRepair');
+    // navigation.navigate('Map');
   };
 
   const handleViewBookings = () => {
@@ -22,6 +23,16 @@ const DashboardScreen = ({ navigation }) => {
   const handleContactSupport = () => {
     // Navigate to the contact support screen or implement your support functionality
     navigation.navigate('Contacts');
+  };
+
+  const handleNotifications = () => {
+    navigation.navigate('Notifications')
+  }
+
+  const handleViewProfile = () => {
+    // Navigate to the profile screen
+    // navigation.navigate('Profile');
+    navigation.navigate('Profile', { user: route.params.user });
   };
 
   return (
@@ -73,6 +84,27 @@ const DashboardScreen = ({ navigation }) => {
           <Button style={styles.button} textColor='white' mode='contained' onPress={handleContactSupport}>Contact Now</Button>
         </Card.Actions>
       </Card>
+
+      <Card style={styles.card} mode='outlined'>
+        <Card.Content>
+          <Title>View Notifications</Title>
+          <Paragraph>View and manage your notification information.</Paragraph>
+        </Card.Content>
+        <Card.Actions>
+          <Button style={styles.button} textColor='white' mode='contained' onPress={handleNotifications}>Notifications</Button>
+        </Card.Actions>
+      </Card>
+
+      <Card style={styles.card} mode='outlined'>
+        <Card.Content>
+          <Title>View Profile</Title>
+          <Paragraph>View and manage your profile information.</Paragraph>
+        </Card.Content>
+        <Card.Actions>
+          <Button style={styles.button} textColor='white' mode='contained' onPress={handleViewProfile}>View Profile</Button>
+        </Card.Actions>
+      </Card>
+
     </View>
     </ScrollView>
   );

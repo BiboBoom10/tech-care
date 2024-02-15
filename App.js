@@ -15,6 +15,12 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Profile from './screens/Profile';
 import AdminDashboard from './screens/AdminDashboard';
 import UserManagement from './screens/UserManagement';
+import { AuthProvider } from './services/auth-context';
+import MainNavigation from './navigation/MainNavigation';
+import 'react-native-gesture-handler'
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+// import AdminDashboard from './screens/AdminDashboard';
 
 const Stack = createNativeStackNavigator();
 
@@ -30,21 +36,15 @@ export default function App() {
   
 
   return (
-    <PaperProvider theme={theme}>
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen name="Home" options={{ headerShown: false }} component={WelcomeScreen} />
-          <Stack.Screen name="Login" component={Login} />
-          <Stack.Screen name="SignUp" component={SignUp} />
-          <Stack.Screen name="DashboardScreen" component={DashboardScreen} options={{title: 'Tech Care Dashboard'}} />
-          <Stack.Screen name="Merchant" component={Merchant} />
-          <Stack.Screen name="OrderPlacement" component={OrderPlacement} />
-          <Stack.Screen name="TrackRepair" component={TrackRepair} />
-          <Stack.Screen name="Contacts" component={Contacts} />
-          <Stack.Screen name="RecentBookings" component={RecentBookings} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </PaperProvider>
+    <AuthProvider>
+      <PaperProvider theme={theme}>
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <BottomSheetModalProvider>
+            <MainNavigation />
+          </BottomSheetModalProvider>
+        </GestureHandlerRootView>
+      </PaperProvider>
+    </AuthProvider>
   );
 }
 

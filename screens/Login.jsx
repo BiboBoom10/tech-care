@@ -5,6 +5,8 @@ import { useState } from 'react';
 import { Alert, StyleSheet, Text, View, Image } from 'react-native'
 import { Button, Snackbar, TextInput, Title } from 'react-native-paper';
 
+import { useAuth } from '../services/auth-context';
+
 function Login() {
 
     const [email, setEmail] = useState('');
@@ -12,20 +14,39 @@ function Login() {
     const [visible, setVisible] = useState(false);
     const [emailError, setEmailError] = useState(null);
     const [passwordError, setPasswordError] = useState(null);
+    const [userType, setUserType] = useState('client');
 
     const navigation = useNavigation();
 
-    const handleLogin = () => {
-        if (email.trim() === '' || password.trim() === '') {
-            setEmailError('Email cannot be empty');
-            setPasswordError('Password cannot be empty');
-            return;
-          } else if (!email.includes('@')) {
-            setEmailError('Invalid email format');
-            return;
-          }
-          setVisible(true);
-          navigation.navigate('DashboardScreen')
+    const { login } = useAuth();
+
+    const handleLogin = async () => {
+      if (email.trim() === '' || password.trim() === '') {
+          setEmailError('Email cannot be empty');
+          setPasswordError('Password cannot be empty');
+          return;
+        } else if (!email.includes('@')) {
+          setEmailError('Invalid email format');
+          return;
+        }
+        // setVisible(true);
+        const isAdmin = userType.toLowerCase() === 'admin' ? false : true;
+        const data = { email, password, isAdmin };
+        const user = await login(data);
+
+        await login(data);
+
+        // Check the user's role and navigate accordingly
+        if (user.isAdmin) {
+          setUserType(navigation.navigate('AdminDashboardScreen'))
+        } else {
+          setUserType(navigation.navigate('DashboardScreen'))
+        }
+      }
+
+
+    const handleForgotPassword = () => {
+      Alert.alert("Forgot Password", "Implement the logic to handle forgot password functionality.");
     }
 
   return (
@@ -68,6 +89,9 @@ function Login() {
     <Button mode="contained" onPress={handleLogin} style={styles.button} textColor='white'>
       Login
     </Button>
+    <Text style={styles.forgotPassword} onPress={handleForgotPassword}>
+                Forgot Password?
+    </Text>
     <Snackbar
         style={styles.snackbar}
       visible={visible}
@@ -125,5 +149,11 @@ const styles = StyleSheet.create({
     errorText: {
         color: 'red',
         marginBottom: 10,
-      }
+      },
+      forgotPassword: {
+        textAlign: 'center',
+        marginTop: 10,
+        textDecorationLine: 'underline',
+        color: 'gray',
+    }
   });

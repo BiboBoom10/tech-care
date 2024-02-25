@@ -8,11 +8,22 @@ const Contacts = () => {
   const [message, setMessage] = useState('');
   const [snackbarVisible, setSnackbarVisible] = useState(false);
 
-  const handleContactNow = () => {
-    // Perform contact logic here
-    // For demonstration purposes, just show a snackbar
-    setSnackbarVisible(true);
+  const handleContactNow = async () => {
+    try {
+      await fetch('https://tech-care-server.vercel.app/auth/send-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, email, message }),
+      });
+
+      setSnackbarVisible(true);
+    } catch (error) {
+      console.error('Error sending email:', error.message);
+    }
   };
+
 
   const onSnackbarDismiss = () => {
     setSnackbarVisible(false);

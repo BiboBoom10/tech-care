@@ -21,6 +21,7 @@ import 'react-native-gesture-handler'
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 // import AdminDashboard from './screens/AdminDashboard';
+import { BookingProvider } from './services/booking-context';
 
 const Stack = createNativeStackNavigator();
 
@@ -37,13 +38,15 @@ export default function App() {
 
   return (
     <AuthProvider>
-      <PaperProvider theme={theme}>
-        <GestureHandlerRootView style={{ flex: 1 }}>
-          <BottomSheetModalProvider>
-            <MainNavigation />
-          </BottomSheetModalProvider>
-        </GestureHandlerRootView>
-      </PaperProvider>
+      <BookingProvider>
+        <PaperProvider theme={theme}>
+          <GestureHandlerRootView style={{ flex: 1 }}>
+            <BottomSheetModalProvider>
+              <MainNavigation />
+            </BottomSheetModalProvider>
+          </GestureHandlerRootView>
+        </PaperProvider>
+      </BookingProvider>
     </AuthProvider>
   );
 }

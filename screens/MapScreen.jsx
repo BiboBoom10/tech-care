@@ -12,15 +12,30 @@ const MapScreen = () => {
         longitudeDelta: 0.01,
       });
 
+      const [markers, setMarkers] = useState([]);
+
+    const [origin, setOrigin] = useState({
+      latitude: -1.3916345,
+      longitude: 36.7717687,
+    });
+
+    const addMarker = (details) => {
+      setMarkers(prev => ([...prev, details]))
+    }
+
   return (
     <View style={styles.container}>
       <MapView
         style={{ alignSelf: 'stretch', height: '100%' }}
         region={mapRegion}
         maxZoomLevel={30}
-        onMarkerDrag={(event) => {}}
+        onPress={(e) => { addMarker(e.nativeEvent.coordinate) }}
       >
-        <Marker coordinate={mapRegion} title='Marker' />
+        {markers.map((marker, index) => {
+          return (
+            <Marker key={index} draggable coordinate={marker} title={`Marker ${index + 1}`} />
+          )
+        })}
       </MapView>
     </View>
   )

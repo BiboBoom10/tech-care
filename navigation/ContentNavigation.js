@@ -31,7 +31,7 @@ const ContentNavigation = () => {
             <Stack.Screen name="OrderPlacement" component={OrderPlacement} />
             <Stack.Screen name="Map" component={MapScreen} />
             <Stack.Screen name="TrackRepair" component={TrackRepair} />
-            {/* <Stack.Screen name="Contacts" component={Contacts} /> */}
+            <Stack.Screen name="Contacts" component={Contacts} />
             <Stack.Screen name="Notifications" component={Notifications} />
             <Stack.Screen name="RecentBookings" component={RecentBookings} />
             {/* <Stack.Screen name="Profile" component={Profile} /> */}

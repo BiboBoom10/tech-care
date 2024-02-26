@@ -51,6 +51,7 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 18,
     color: 'gray',
+    textAlign: 'center'
   },
   notificationItem: {
     borderBottomWidth: 1,

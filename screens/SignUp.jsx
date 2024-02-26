@@ -12,6 +12,7 @@ const SignUp = () => {
   const [password, setPassword] = useState('');
   const [userType, setUserType] = useState('client'); // Default is 'client'
   const [snackbarVisible, setSnackbarVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const navigation = useNavigation();
 
@@ -19,25 +20,25 @@ const SignUp = () => {
 
   const handleSignUp = async () => {
     try {
+      setLoading(true);
       const isAdmin = userType.toLowerCase() === 'client' ? false : true;
       const data = { name, email, password, isAdmin };
-      setSnackbarVisible(true);
-  
+      
       // Ensure that you await the register function to get the user data
       const user = await register(data);
-  
+
+      setLoading(false);
+
       if (user.isAdmin) {
         navigation.navigate('AdminDashboardScreen');
       } else {
         navigation.navigate('DashboardScreen');
       }
     } catch (error) {
-      // Handle any errors that might occur during registration
       console.error('Registration failed:', error);
-      // You might want to set an error state or display an error message to the user
+      setSnackbarVisible(true);
     } finally {
-      // Regardless of success or failure, dismiss the snackbar
-      // setSnackbarVisible(false);
+      setLoading(false);
     }
   };
   
@@ -89,9 +90,15 @@ const SignUp = () => {
         value={userType}
       />
 
-      <Button mode="contained" onPress={handleSignUp} style={styles.button} textColor='white'>
-        Sign Up
-      </Button>
+    <Button
+      mode="contained"
+      onPress={handleSignUp}
+      style={styles.button}
+      disabled={loading}
+      labelStyle={{ color: 'white' }}
+    >
+      {loading ? 'Signing Up...' : 'Sign Up'}
+    </Button>
 
       <Snackbar
         visible={snackbarVisible}
@@ -154,6 +161,8 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 16,
+    backgroundColor: '#f93a13',
+    justifyContent: 'center',
   },
   input: {
     marginBottom: 10,

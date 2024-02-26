@@ -13,6 +13,8 @@ import { useAuth } from '../services/auth-context';
 import Analytics from '../screens/Analytics';
 import MapScreen from '../screens/MapScreen';
 import Notifications from '../screens/Notifications';
+import AdminManageOrders from '../screens/AdminManageOrders';
+import AdminUserReports from '../screens/AdminUserReports';
 
 const Stack = createNativeStackNavigator();
 
@@ -24,6 +26,8 @@ const ContentNavigation = () => {
           {user.isAdmin && <>
             <Stack.Screen name="AdminDashboardScreen" component={AdminDashboard} options={{title: 'Tech Care Dashboard'}} />
             <Stack.Screen name="Analytics" component={Analytics} />
+            <Stack.Screen name='AdminManageOrders' component={AdminManageOrders} />
+            <Stack.Screen name='AdminUserReports' component={AdminUserReports} />
           </>}
           {!user.isAdmin && <>
             <Stack.Screen name="DashboardScreen" component={DashboardScreen} options={{title: 'Tech Care Dashboard'}} />

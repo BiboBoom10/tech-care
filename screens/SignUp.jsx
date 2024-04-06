@@ -10,9 +10,10 @@ const SignUp = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [userType, setUserType] = useState('client'); // Default is 'client'
+  const [userType, setUserType] = useState('Client'); // Default is 'client'
   const [snackbarVisible, setSnackbarVisible] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [phone, setPhone] = useState('');
 
   const navigation = useNavigation();
 
@@ -21,19 +22,14 @@ const SignUp = () => {
   const handleSignUp = async () => {
     try {
       setLoading(true);
-      const isAdmin = userType.toLowerCase() === 'client' ? false : true;
-      const data = { name, email, password, isAdmin };
+      // const isAdmin = userType.toLowerCase() === 'client' ? false : true;
+      const data = { name, email, password, phone, isTechnician: userType === 'Technician' };
       
       // Ensure that you await the register function to get the user data
-      const user = await register(data);
+      await register(data);
 
       setLoading(false);
 
-      if (user.isAdmin) {
-        navigation.navigate('AdminDashboardScreen');
-      } else {
-        navigation.navigate('DashboardScreen');
-      }
     } catch (error) {
       console.error('Registration failed:', error);
       setSnackbarVisible(true);
@@ -71,6 +67,14 @@ const SignUp = () => {
       />
 
       <TextInput
+          label="Phone Number"
+          value={phone}
+          onChangeText={text => setPhone(text)}
+          keyboardType="phone-pad"
+          style={styles.input}
+        />
+
+      <TextInput
         label="Password"
         value={password}
         onChangeText={text => setPassword(text)}
@@ -78,12 +82,14 @@ const SignUp = () => {
         style={styles.input}
       />
 
+      
+
       <Text style={styles.userTypeLabel}>Choose User Type:</Text>
       <RNPickerSelect
         placeholder={{ label: 'Select User Type', value: null }}
         items={[
-          { label: 'Client', value: 'client' },
-          { label: 'Admin', value: 'admin' },
+          { label: 'Client', value: 'User' },
+          { label: 'Techy', value: 'Technician' },
         ]}
         onValueChange={(value) => setUserType(value)}
         style={pickerSelectStyles}
@@ -100,7 +106,7 @@ const SignUp = () => {
       {loading ? 'Signing Up...' : 'Sign Up'}
     </Button>
 
-      <Snackbar
+      {/* <Snackbar
         visible={snackbarVisible}
         onDismiss={onSnackbarDismiss}
         action={{
@@ -109,7 +115,7 @@ const SignUp = () => {
         }}
       >
         Sign-up successful! (Snackbar for demo)
-      </Snackbar>
+      </Snackbar> */}
     </View>
     </ScrollView>
   );
@@ -142,7 +148,7 @@ const styles = StyleSheet.create({
   // ... (previous styles)
 
   container: {
-    flex: 1,
+    // flex: 1,
     padding: 16,
     justifyContent: 'center',
   },

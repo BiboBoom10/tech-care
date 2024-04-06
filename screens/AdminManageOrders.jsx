@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, FlatList, Text, TouchableOpacity, TextInput, ScrollView } from 'react-native';
 import { Title, Card, Divider, IconButton, Button, Badge } from 'react-native-paper';
+import axios from 'axios';
 
 const dummyOrders = [
   {
@@ -14,20 +15,29 @@ const dummyOrders = [
     deliveryOptions: 'Express',
     phoneNumber: '123-456-7890',
     serviceOrProduct: 'Service',
-    status: 'Pending', // Added status field to track order status
-    rejectionReason: '', // Added rejectionReason field
+    status: 'Pending', 
+    rejectionReason: '',
   },
-  // Add more orders as needed
+  
 ];
 
 const AdminManageOrders = ({ navigation }) => {
-  const [orders, setOrders] = useState(dummyOrders);
+  const [orders, setOrders] = useState([]);
+  // const [orders, setOrders] = useState(dummyOrders);
   const [rejectionReason, setRejectionReason] = useState('');
   const [selectedOrderId, setSelectedOrderId] = useState(null);
 
   useEffect(() => {
-    // Fetch orders from the backend or update the state as needed
-    // Example: fetchOrdersFromAPI().then(data => setOrders(data));
+    const fetchOrders = async () => {
+      try {
+        const response = await axios.get('https://tech-care-server.vercel.app/auth/orders');
+        setOrders(response.data)
+      } catch (error) {
+        console.log('Error fetching orders', error);
+      }
+    }
+
+    fetchOrders();
   }, []);
 
   const handleAcceptOrder = (orderId) => {
@@ -39,7 +49,7 @@ const AdminManageOrders = ({ navigation }) => {
       )
     );
   };
-
+  
   const handleRejectOrder = (orderId) => {
     // Implement logic to reject the selected order with a reason
     console.log(`Rejecting order with ID: ${orderId} for reason: ${rejectionReason}`);
@@ -50,6 +60,24 @@ const AdminManageOrders = ({ navigation }) => {
     );
     setSelectedOrderId(null);
     setRejectionReason('');
+
+    // Send notification to user
+    sendNotification(orderId, 'Rejected');
+  };
+
+  const sendNotification = (orderId, status) => {
+    const notificationData = {
+      orderId,
+      status,
+    };
+
+    axios.post('https://tech-care-server.vercel.app/notify/notifications', notificationData)
+      .then((response) => {
+        console.log('Notification sent successfully:', response.data);
+      })
+      .catch((error) => {
+        console.error('Error sending notification:', error);
+      });
   };
 
   const renderItem = ({ item }) => (
@@ -154,7 +182,7 @@ const styles = StyleSheet.create({
   },
   orderCard: {
     marginBottom: 16,
-    borderColor: '#f93a13',
+    borderColor: '#f93a13'
   },
   orderInfo: {
     marginBottom: 8,

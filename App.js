@@ -1,5 +1,5 @@
 // import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { PaperProvider } from 'react-native-paper';
 import Login from './screens/Login';
 import Merchant from './screens/Merchant';
@@ -42,7 +42,11 @@ export default function App() {
         <PaperProvider theme={theme}>
           <GestureHandlerRootView style={{ flex: 1 }}>
             <BottomSheetModalProvider>
-              <MainNavigation />
+              <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                  <MainNavigation />
+                </TouchableWithoutFeedback>
+              </KeyboardAvoidingView>
             </BottomSheetModalProvider>
           </GestureHandlerRootView>
         </PaperProvider>

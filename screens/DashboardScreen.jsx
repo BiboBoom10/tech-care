@@ -1,12 +1,17 @@
 import React from 'react';
 import { ScrollView } from 'react-native';
 import { View, StyleSheet, Image } from 'react-native';
-import { Title, Button, Card, Paragraph } from 'react-native-paper';
+import { Title, Button, Card, Paragraph, IconButton } from 'react-native-paper';
+import { useAuth } from '../services/auth-context';
 
 const DashboardScreen = ({ navigation, route }) => {
+
+  const { logout } = useAuth();
+
   const handleBookRepair = () => {
     // Navigate to the repair booking screen
-    navigation.navigate('OrderPlacement');
+    // navigation.navigate('OrderPlacement');
+    navigation.navigate('TechnicianListScreen');
   };
 
   const handleTrackRepair = () => {
@@ -29,10 +34,16 @@ const DashboardScreen = ({ navigation, route }) => {
     navigation.navigate('Notifications')
   }
 
-  const handleViewProfile = () => {
+  const handleViewProfile = (user) => {
     // Navigate to the profile screen
     // navigation.navigate('Profile');
-    navigation.navigate('Profile', { user: route.params.user });
+    navigation.navigate('Profile', { user });
+  };
+
+  const handleLogout = () => {
+    logout();
+    // Implement logout logic
+    console.log('Logging out...');
   };
 
   return (
@@ -55,7 +66,7 @@ const DashboardScreen = ({ navigation, route }) => {
         </Card.Actions>
       </Card>
 
-      <Card style={styles.card} mode='outlined'>
+      {/* <Card style={styles.card} mode='outlined'>
         <Card.Content>
           <Title>Track Repair</Title>
           <Paragraph>Monitor the progress of your ongoing repairs in real-time.</Paragraph>
@@ -63,7 +74,7 @@ const DashboardScreen = ({ navigation, route }) => {
         <Card.Actions>
           <Button style={styles.button} textColor='white' mode='contained' onPress={handleTrackRepair}>Track Now</Button>
         </Card.Actions>
-      </Card>
+      </Card> */}
 
       <Card style={styles.card} mode='outlined'>
         <Card.Content>
@@ -72,16 +83,6 @@ const DashboardScreen = ({ navigation, route }) => {
         </Card.Content>
         <Card.Actions>
           <Button style={styles.button} textColor='white' mode='contained' onPress={handleViewBookings}>View All</Button>
-        </Card.Actions>
-      </Card>
-
-      <Card style={styles.card} mode='outlined'>
-        <Card.Content>
-          <Title>Contact Support</Title>
-          <Paragraph>Need assistance? Reach out to our support team for help.</Paragraph>
-        </Card.Content>
-        <Card.Actions>
-          <Button style={styles.button} textColor='white' mode='contained' onPress={handleContactSupport}>Contact Now</Button>
         </Card.Actions>
       </Card>
 
@@ -105,6 +106,20 @@ const DashboardScreen = ({ navigation, route }) => {
         </Card.Actions>
       </Card>
 
+      {/* <Card style={styles.card} mode='outlined'>
+        <Card.Content>
+          <Title>Contact Support</Title>
+          <Paragraph>Need assistance? Reach out to our support team for help.</Paragraph>
+        </Card.Content>
+        <Card.Actions>
+          <Button style={styles.button} textColor='white' mode='contained' onPress={handleContactSupport}>Contact Now</Button>
+        </Card.Actions>
+      </Card> */}
+
+      <View style={styles.logoutContainer}>
+        <IconButton icon="logout" size={24} color="#FF0000" onPress={handleLogout} />
+      </View>
+
     </View>
     </ScrollView>
   );
@@ -123,7 +138,8 @@ const styles = StyleSheet.create({
   },
   card: {
     marginVertical: 8,
-    borderColor: 'gray'
+    borderColor: 'gray',
+    backgroundColor: 'white',
   },
   button: {
     backgroundColor: '#f93a13',
@@ -137,6 +153,10 @@ const styles = StyleSheet.create({
 logo: {
     height: 100,
     width: 100,
+},
+logoutContainer: {
+  alignItems: 'flex-end',
+  marginTop: 16,
 },
 });
 

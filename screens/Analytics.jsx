@@ -11,8 +11,8 @@ const Analytics = () => {
     totalOrders: 150,
     successfulOrders: 120,
     failedOrders: 30,
-    revenue: '$25,000',
-    popularDevice: 'Smartphone',
+    // revenue: '$25,000',
+    popularDevice: 'Laptops',
   };
 
   // Data for the bar chart
@@ -71,12 +71,12 @@ const Analytics = () => {
           </Card.Content>
         </Card>
 
-        <Card style={styles.card} mode='outlined'>
+        {/* <Card style={styles.card} mode='outlined'>
           <Card.Content>
             <Title>Revenue</Title>
             <Paragraph>{analyticsData.revenue}</Paragraph>
           </Card.Content>
-        </Card>
+        </Card> */}
 
         <Card style={styles.card} mode='outlined'>
           <Card.Content>

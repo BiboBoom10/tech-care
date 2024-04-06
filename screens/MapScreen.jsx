@@ -28,9 +28,10 @@ const MapScreen = () => {
       <MapView
         style={{ alignSelf: 'stretch', height: '100%' }}
         region={mapRegion}
-        maxZoomLevel={30}
+        maxZoomLevel={16}
         onPress={(e) => { addMarker(e.nativeEvent.coordinate) }}
       >
+        <Marker draggable coordinate={{ latitude: -1.3919842, longitude: 36.7716195 }} title={`Marker ${index + 1}`} />
         {markers.map((marker, index) => {
           return (
             <Marker key={index} draggable coordinate={marker} title={`Marker ${index + 1}`} />

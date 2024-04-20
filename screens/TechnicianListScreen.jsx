@@ -42,7 +42,8 @@ const TechnicianListScreen = ({ navigation }) => {
           <View style={styles.details}>
             <Title>{item.name}</Title>
             <Paragraph>Service Offered: {item.service}</Paragraph>
-            <Paragraph>Location: {item.location}</Paragraph>
+            {item?.services?.map((service, index) => <Paragraph key={index}>{service}</Paragraph>)}
+            <Paragraph>Location: {item.address}</Paragraph>
           </View>
         </View>
         <View style={styles.ratingSection}>

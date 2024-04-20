@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, ScrollView, Text } from 'react-native';
 import { Title, Card, Paragraph, Subheading, Button } from 'react-native-paper';
 import axios from 'axios';
+import axiosInstance from '../utils/axios';
 
 const RecentBookings = () => {
   const [eachOrder, setEachOrder] = useState([]);
@@ -10,12 +11,8 @@ const RecentBookings = () => {
 
   const myBookings = async () => {
     try {
-      const response = await axios.get('https://tech-care-server.vercel.app/auth/orders');
-      const orders = response.data.map(order => ({
-        ...order,
-        createdAt: new Date(order.createdAt) // Convert createdAt to Date object
-      }));
-
+      const response = await axiosInstance.get('/auth/orders');
+      const orders = response.data;
       if (sortBy === 'day') {
         orders.sort((a, b) => b.createdAt - a.createdAt); // Sort by descending order of creation date
       } else if (sortBy === 'service') {
@@ -79,6 +76,10 @@ const RecentBookings = () => {
               <Paragraph>
                 <Text style={styles.miniTitle}>Day and Time:</Text>{' '}
                 {booking.createdAt.toLocaleString('en-US', { weekday: 'long', hour: 'numeric', minute: 'numeric' })}
+              </Paragraph>
+              <Paragraph>
+                <Text style={styles.miniTitle}>Status:</Text>{' '}
+                {booking.status}
               </Paragraph>
             </Card.Content>
           </Card>

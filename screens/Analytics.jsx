@@ -8,9 +8,9 @@ import { ScrollView } from 'react-native-gesture-handler';
 const Analytics = () => {
   // Static analytics data (replace with actual data fetching logic)
   const analyticsData = {
-    totalOrders: 150,
-    successfulOrders: 120,
-    failedOrders: 30,
+    totalOrders: 30,
+    successfulOrders: 20,
+    failedOrders: 10,
     // revenue: '$25,000',
     popularDevice: 'Laptops',
   };
@@ -31,12 +31,12 @@ const Analytics = () => {
         <Title style={styles.title}>Analytics Overview</Title>
 
         {/* Bar Chart */}
-        <Card style={styles.card} mode='outlined'>
+        <Card style={styles.card}>
           <Card.Content>
             <BarChart
               data={barChartData}
-              width={350}
-              height={200}
+              width={340}
+              height={250}
               chartConfig={{
                 backgroundGradientFrom: '#f93a13',
                 backgroundGradientTo: '#f93a13',
@@ -53,21 +53,21 @@ const Analytics = () => {
         <Card style={styles.card} mode='outlined'>
           <Card.Content>
             <Title>Total Orders</Title>
-            <Paragraph>{analyticsData.totalOrders}</Paragraph>
+            <Paragraph style={{color: '#f93a13'}}>{analyticsData.totalOrders}</Paragraph>
           </Card.Content>
         </Card>
 
         <Card style={styles.card} mode='outlined'>
           <Card.Content>
             <Title>Successful Orders</Title>
-            <Paragraph>{analyticsData.successfulOrders}</Paragraph>
+            <Paragraph style={{color: '#f93a13'}}>{analyticsData.successfulOrders}</Paragraph>
           </Card.Content>
         </Card>
 
         <Card style={styles.card} mode='outlined'>
           <Card.Content>
             <Title>Failed Orders</Title>
-            <Paragraph>{analyticsData.failedOrders}</Paragraph>
+            <Paragraph style={{color: '#f93a13'}}>{analyticsData.failedOrders}</Paragraph>
           </Card.Content>
         </Card>
 
@@ -78,12 +78,12 @@ const Analytics = () => {
           </Card.Content>
         </Card> */}
 
-        <Card style={styles.card} mode='outlined'>
+        {/* <Card style={styles.card} mode='outlined'>
           <Card.Content>
             <Title>Popular Device</Title>
             <Paragraph>{analyticsData.popularDevice}</Paragraph>
           </Card.Content>
-        </Card>
+        </Card> */}
       </View>
     </ScrollView>
   );
@@ -101,7 +101,8 @@ const styles = StyleSheet.create({
   },
   card: {
     marginVertical: 8,
-    borderColor: 'gray'
+    borderColor: 'gray',
+    backgroundColor: 'white'
   },
 });
 

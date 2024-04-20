@@ -6,6 +6,9 @@ import MapPicker from '../components/MapPicker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../services/auth-context';
+import axios from 'axios';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { storage } from '../firebase';
 
 const AddServiceDetails = () => {
   const [profilePicture, setProfilePicture] = useState(null);
@@ -15,6 +18,7 @@ const AddServiceDetails = () => {
   const [loc, setLoc] = useState();
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
+  const [imageFile, setImageFile] = useState(null);
 
   const { updateUser } = useAuth();
   // Function to handle adding a new service field
@@ -40,6 +44,7 @@ const AddServiceDetails = () => {
 
      if (!result.canceled) {
       setProfilePicture(result.assets[0].uri);
+      setImageFile(result.assets[0]);
     }
   };
 
@@ -47,6 +52,7 @@ const AddServiceDetails = () => {
   const handleSubmit = async () => {
     try {
       setIsLoading(true);
+      
       const data = {
         profile: profilePicture,
         description: companyDescription,
@@ -55,6 +61,16 @@ const AddServiceDetails = () => {
         longitude: loc?.longitude,
         latitude: loc?.latitude
       };
+      if (profilePicture) {
+        const file = await fetch(profilePicture);
+        const fileData = await file.blob();
+        const storeRef = ref(storage, `/profile/${profilePicture.substring(profilePicture.lastIndexOf('/')+1) || 'profile'}`);
+        const imRes = await uploadBytes(storeRef, fileData);
+        const imageUrl = await getDownloadURL(imRes.ref);
+        console.log('Image', imageUrl)
+        data.profile = imageUrl
+      };
+      console.log(data);
       await updateUser(data);
       setProfilePicture(null);
       setCompanyDescription('');

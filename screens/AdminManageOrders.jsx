@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, FlatList, Text, TouchableOpacity, TextInput, ScrollView } from 'react-native';
 import { Title, Card, Divider, IconButton, Button, Badge } from 'react-native-paper';
 import axios from 'axios';
+import axiosInstance from '../utils/axios';
 
 const dummyOrders = [
   {
@@ -30,7 +31,7 @@ const AdminManageOrders = ({ navigation }) => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await axios.get('https://tech-care-server.vercel.app/auth/orders');
+        const response = await axiosInstance.get('/auth/orders');
         setOrders(response.data)
       } catch (error) {
         console.log('Error fetching orders', error);
@@ -126,10 +127,10 @@ const AdminManageOrders = ({ navigation }) => {
 
         {item.status === 'Pending' && (
           <View style={styles.actionsContainer}>
-            <TouchableOpacity onPress={() => handleAcceptOrder(item.id)}>
+            <TouchableOpacity onPress={() => handleAcceptOrder(item._id)}>
               <IconButton icon="check" size={20} color="#2ecc71" />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => setSelectedOrderId(item.id)}>
+            <TouchableOpacity onPress={() => setSelectedOrderId(item._id)}>
               <IconButton icon="close" size={20} color="#e74c3c" />
             </TouchableOpacity>
           </View>
@@ -157,7 +158,7 @@ const AdminManageOrders = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Title style={styles.title}>Manage Orders</Title>
+      <Title style={styles.title}>Orders History</Title>
       <FlatList
         data={orders}
         renderItem={renderItem}

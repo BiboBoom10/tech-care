@@ -22,6 +22,7 @@ import EachOrder from '../screens/EachOrder';
 import AddServiceDetails from '../screens/AddServiceDetails';
 import DisplayService from '../screens/DisplayService';
 import RatingScreen from '../screens/RatingScreen';
+import AdminNotifications from '../screens/AdminNotifications';
 
 const Stack = createNativeStackNavigator();
 
@@ -38,6 +39,7 @@ const ContentNavigation = () => {
             <Stack.Screen name='AdminOverview' component={AdminOverview} />
             <Stack.Screen name='DisplayService' component={DisplayService} />
             <Stack.Screen name='AdminUserReports' component={AdminUserReports} />
+            <Stack.Screen name='AdminNotifications' component={AdminNotifications} />
             <Stack.Screen
               name="AddServiceDetails"
               component={AddServiceDetails}

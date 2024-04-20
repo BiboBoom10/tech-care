@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { Rating } from 'react-native-ratings';
+import axiosInstance from '../utils/axios';
 
 const RatingScreen = ({ route, navigation }) => {
   // Assuming you have the technician's details in the route params
-  const { technicianName } = route.params;
+  const { technicianName, notificationId } = route.params;
 
   const [rating, setRating] = useState(0);
 
-  const handleRatingSubmit = () => {
+  const handleRatingSubmit = async () => {
     if (rating === 0) {
       Alert.alert('Please select a rating', 'Please provide a rating before submitting.');
       return;
@@ -17,6 +18,7 @@ const RatingScreen = ({ route, navigation }) => {
     // TODO: Implement logic to submit the rating to the backend
     // You can use the 'rating' state and the technician details from the route params
 
+    await axiosInstance.patch('/auth/rate-order', { orderId: notificationId, rating })
     // For demonstration purposes, alert the user
     // Alert.alert('Rating Submitted', `Thank you for rating ${technicianName} with ${rating} stars!`);
     Alert.alert('Rating Submitted', `Thank you for rating: ${rating} stars!`);

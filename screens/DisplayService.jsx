@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Image } from 'react-native';
 import { useAuth } from '../services/auth-context';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
+import { Button } from 'react-native-paper';
 
 const DisplayService = ({ route }) => {
   
@@ -23,7 +24,7 @@ const DisplayService = ({ route }) => {
       {user?.services && <>
         <View style={styles.infoContainer}>
           {/* Display profile picture if available */}
-          {user?.profilePicture && (
+          {user?.profile && (
             <View style={styles.profilePictureContainer}>
               {/* <Text>Profile Picture:</Text> */}
               <Image source={{ uri: user?.profile }} style={styles.profilePicture} />
@@ -48,6 +49,8 @@ const DisplayService = ({ route }) => {
         </View>
       </>}
 
+      <Button onPress={() => {navigate('AddServiceDetails')}} style={{marginTop: 16}} mode='contained' textColor='white'>Edit</Button>
+
     </View>
   );
 };
@@ -68,6 +71,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ccc',
     padding: 16,
+    borderRadius: 8,
+    backgroundColor: 'white'
   },
   profilePictureContainer: {
     alignItems: 'center',
@@ -83,6 +88,7 @@ const styles = StyleSheet.create({
   label: {
     fontWeight: 'bold',
     marginBottom: 8,
+    color: '#f93a13'
   },
   info: {
     marginBottom: 8,

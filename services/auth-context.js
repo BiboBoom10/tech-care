@@ -79,9 +79,7 @@ export const AuthProvider = ({ children }) => {
 
   const addOrder = async (data) => {
     try {
-      const config = { headers: { 'Authorization': `Bearer ${user?.token}` } };
-      console.log(data);
-      const response = await axios.post('https://tech-care-server.vercel.app/auth/orders', data, config);
+      const response = await axiosInstance.post('/auth/orders', data);
       console.log(response?.data?.order);
     } catch (error) {
       throw error?.response?.data?.content || error?.response?.data?.message || error?.message || 'Something went wrong';

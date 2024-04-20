@@ -2,9 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, FlatList, Text, TouchableOpacity, TextInput, ScrollView } from 'react-native';
 import { Title, Card, Divider, IconButton, Button, Chip } from 'react-native-paper'; // Importing necessary components from react-native-paper
 import axios from 'axios';
+import axiosInstance from '../utils/axios';
 
 const AdminManageOrders = ({ navigation }) => {
   // State variables
+  const [isLoading, setIsLoading] = useState(false);
+  const [selected, setSelected] = useState();
   const [orders, setOrders] = useState([]); // State variable to store orders
   const [rejectionReason, setRejectionReason] = useState(''); // State variable to store rejection reason
   const [selectedOrderId, setSelectedOrderId] = useState(null); // State variable to store the selected order ID
@@ -13,7 +16,7 @@ const AdminManageOrders = ({ navigation }) => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await axios.get('https://tech-care-server.vercel.app/auth/orders'); // Fetch orders from the server
+        const response = await axiosInstance.get('/auth/orders'); // Fetch orders from the server
         setOrders(response.data); // Update orders state with fetched data
       } catch (error) {
         console.log('Error fetching orders', error); // Log error if fetching fails
@@ -26,19 +29,24 @@ const AdminManageOrders = ({ navigation }) => {
   // Function to handle rejecting an order
 const handleRejectOrder = async (orderId) => {
   try {
+    setSelected(orderId);
+    setIsLoading(true);
     if (!rejectionReason) {
       // If rejection reason is not provided, show an alert or return early
       alert('Please provide a reason for rejection.');
       return;
     }
 
+    const bodyData = { orderId, status: "Rejected", rejectionReason };
+    const response = await axiosInstance.patch('/auth/update-order-status', bodyData);
+
     // Implement the logic to update the order status to 'Rejected' in the database
     // For example, send a PUT request to update the order status
-    await axios.put(`https://tech-care-server.vercel.app/auth/orders/${orderId}`, { status: 'Rejected', rejectionReason });
+    // await axios.put(`https://tech-care-server.vercel.app/auth/orders/${orderId}`, { status: 'Rejected', rejectionReason });
 
     // Update the local orders state to reflect the change
     const updatedOrders = orders.map((order) => {
-      if (order.id === orderId) {
+      if (order._id === orderId) {
         return { ...order, status: 'Rejected' }; // Update the status of the rejected order
       } else {
         return order;
@@ -49,19 +57,22 @@ const handleRejectOrder = async (orderId) => {
     setRejectionReason(''); // Clear the rejection reason input
   } catch (error) {
     console.error('Error rejecting order:', error);
+  } finally {
+    setIsLoading(false);
   }
 };
 
 // Function to handle accepting an order
 const handleAcceptOrder = async (orderId) => {
   try {
-    // Implement the logic to update the order status to 'Accepted' in the database
-    // For example, send a PUT request to update the order status
-    await axios.put(`https://tech-care-server.vercel.app/auth/orders/${orderId}`, { status: 'Accepted', rejectionReason });
+    setSelected(orderId);
+    setIsLoading(true);
+    const bodyData = { orderId, status: "Accepted" };
+    const response = await axiosInstance.patch('/auth/update-order-status', bodyData);
 
     // Update the local orders state to reflect the change
     const updatedOrders = orders.map((order) => {
-      if (order.id === orderId) {
+      if (order._id === orderId) {
         return { ...order, status: 'Accepted' }; // Update the status of the accepted order
       } else {
         return order;
@@ -70,6 +81,8 @@ const handleAcceptOrder = async (orderId) => {
     setOrders(updatedOrders); // Update the orders state with the updated orders
   } catch (error) {
     console.error('Error accepting order:', error);
+  } finally {
+    setIsLoading(false);
   }
 };
 
@@ -96,10 +109,6 @@ const handleAcceptOrder = async (orderId) => {
               <Text style={styles.infoTitle}>Additional Instructions: </Text>
               {item.additionalInstructions}
             </Text>
-            {/* <Text style={styles.infoText}>
-              <Text style={styles.infoTitle}>Service Location: </Text>
-              {item.serviceLocation}
-            </Text> */}
             <Text style={styles.infoText}>
               <Text style={styles.infoTitle}>Delivery Options: </Text>
               {item.deliveryOptions}
@@ -112,29 +121,21 @@ const handleAcceptOrder = async (orderId) => {
               <Text style={styles.infoTitle}>Service or Product: </Text>
               {item.serviceOrProduct}
             </Text>
+            <Text style={styles.infoText}>
+              <Text style={styles.infoTitle}>Date: </Text>
+              {new Date(item.createdAt).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: 'numeric', hour12: true })}
+            </Text>
           </View>
         </ScrollView>
 
-        {/* Render action buttons based on order status */}
-        {/* {item.status === 'Pending' && (
-          <View style={styles.actionsContainer}>
-            <TouchableOpacity onPress={() => handleAcceptOrder(item.id)}>
-              <IconButton icon="check" size={20} color="#2ecc71" />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => setSelectedOrderId(item.id)}>
-              <IconButton icon="close" size={20} color="#e74c3c" />
-            </TouchableOpacity>
-          </View>
-        )} */}
-
         {/* Render rejection reason input and buttons */}
-        {selectedOrderId !== item.id && (
+        {selectedOrderId !== item._id && (
           <View style={styles.rejectionContainer}>
             <View style={styles.actionButtonsContainer}>
-              <Button mode="contained" onPress={() => handleAcceptOrder(item.id)} style={styles.acceptButton} textColor='white'>
+              <Button loading={isLoading} mode="contained" onPress={() => handleAcceptOrder(item._id)} style={styles.acceptButton} textColor='white'>
                 Accept
               </Button>
-              <Button mode="contained" onPress={() => handleRejectOrder(item.id)} style={styles.rejectButton} textColor='white'>
+              <Button loading={isLoading} mode="contained" onPress={() => handleRejectOrder(item._id)} style={styles.rejectButton} textColor='white'>
                 Reject
               </Button>
             </View>
@@ -150,13 +151,13 @@ const handleAcceptOrder = async (orderId) => {
         {/* Render order status chip */}
         <Chip
           style={
-            item.status !== 'Pending'
+            item.status === 'Pending'
               ? styles.pendingChip
               : item.status === 'Accepted'
               ? styles.acceptedChip
               : styles.rejectedChip
           }>
-          {item.status === 'Pending' ? 'Pending' : item.status === 'Accepted' ? 'Accepted' : 'Pending'}
+          {item.status === 'Rejected' ? 'Rejected' : item.status === 'Accepted' ? 'Accepted' : 'Pending'}
         </Chip>
       </Card.Content>
     </Card>
@@ -224,13 +225,13 @@ const styles = StyleSheet.create({
     right: 8,
   },
   pendingChip: {
-    backgroundColor: 'gray', // Gray color for pending status
+    backgroundColor: '#e74c3c', // Gray color for pending status
   },
   acceptedChip: {
     backgroundColor: '#2ecc71', // Green color for accepted status
   },
   rejectedChip: {
-    backgroundColor: '#e74c3c', // Red color for rejected status
+    backgroundColor: 'gray', // Red color for rejected status
   },
   orderList: {
     flex: 1,

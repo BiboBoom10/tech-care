@@ -86,10 +86,10 @@ const AdminManageOrders = ({ navigation }) => {
       <Card.Content>
         <ScrollView>
           <View style={styles.orderInfo}>
-            <Text style={styles.infoText}>
+            {/* <Text style={styles.infoText}>
               <Text style={styles.infoTitle}>Device Type: </Text>
               {item.deviceType}
-            </Text>
+            </Text> */}
             <Text style={styles.infoText}>
               <Text style={styles.infoTitle}>Brand: </Text>
               {item.brand}
@@ -106,18 +106,18 @@ const AdminManageOrders = ({ navigation }) => {
               <Text style={styles.infoTitle}>Additional Instructions: </Text>
               {item.additionalInstructions}
             </Text>
-            <Text style={styles.infoText}>
+            {/* <Text style={styles.infoText}>
               <Text style={styles.infoTitle}>Service Location: </Text>
               {item.serviceLocation}
-            </Text>
+            </Text> */}
             <Text style={styles.infoText}>
               <Text style={styles.infoTitle}>Delivery Options: </Text>
               {item.deliveryOptions}
             </Text>
-            <Text style={styles.infoText}>
+            {/* <Text style={styles.infoText}>
               <Text style={styles.infoTitle}>Phone Number: </Text>
               {item.phoneNumber}
-            </Text>
+            </Text> */}
             <Text style={styles.infoText}>
               <Text style={styles.infoTitle}>Service or Product: </Text>
               {item.serviceOrProduct}
@@ -125,7 +125,7 @@ const AdminManageOrders = ({ navigation }) => {
           </View>
         </ScrollView>
 
-        {item.status === 'Pending' && (
+        {/* {item.status === 'Pending' && (
           <View style={styles.actionsContainer}>
             <TouchableOpacity onPress={() => handleAcceptOrder(item._id)}>
               <IconButton icon="check" size={20} color="#2ecc71" />
@@ -134,7 +134,7 @@ const AdminManageOrders = ({ navigation }) => {
               <IconButton icon="close" size={20} color="#e74c3c" />
             </TouchableOpacity>
           </View>
-        )}
+        )} */}
 
         {selectedOrderId === item.id && (
           <View style={styles.rejectionContainer}>

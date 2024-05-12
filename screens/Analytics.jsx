@@ -1,19 +1,42 @@
 // AnalyticsScreen.js
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Title, Paragraph, Card } from 'react-native-paper';
+import { Title, Paragraph, Card, ActivityIndicator } from 'react-native-paper';
 import { BarChart } from 'react-native-chart-kit';
 import { ScrollView } from 'react-native-gesture-handler';
+import axiosInstance from '../utils/axios';
+
+const data = {
+  totalOrders: 0,
+  successfulOrders: 0,
+  failedOrders: 0,
+  // revenue: '$25,000',
+  popularDevice: 'Laptops',
+};
+
 
 const Analytics = () => {
-  // Static analytics data (replace with actual data fetching logic)
-  const analyticsData = {
-    totalOrders: 30,
-    successfulOrders: 20,
-    failedOrders: 10,
-    // revenue: '$25,000',
-    popularDevice: 'Laptops',
-  };
+
+  const [analyticsData, setAnalyticsData] = useState(data);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const getStats = async () => {
+    try {
+      setIsLoading(true);
+      const { data } = await axiosInstance.get('/statistics');
+      const statsData = {
+        totalOrders: data.orders.length,
+        successfulOrders: data.successfullOrders.length,
+        failedOrders: data.failedOrders.length,
+      };
+      console.log(statsData);
+      setAnalyticsData(statsData)
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   // Data for the bar chart
   const barChartData = {
@@ -24,6 +47,16 @@ const Analytics = () => {
       },
     ],
   };
+
+  useEffect(() => {
+    getStats();
+  }, []);
+
+  if (isLoading) return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <ActivityIndicator />
+    </View>
+  )
 
   return (
     <ScrollView>

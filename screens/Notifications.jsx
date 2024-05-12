@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
-import { Button, Chip } from 'react-native-paper'; // Import Chip component
+import { Button, Chip, ActivityIndicator } from 'react-native-paper'; // Import Chip component
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
@@ -10,17 +10,21 @@ const Notifications = () => {
   const navigation = useNavigation();
   
   const [notifications, setNotifications] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     fetchNotifications();
   }, []);
 
   const fetchNotifications = async () => {
+    setIsLoading(true)
     try {
       const response = await axiosInstance.get('/auth/notifications');
       setNotifications(response.data.notifications);
     } catch (error) {
       console.error('Error fetching notifications:', error);
+    } finally {
+      setIsLoading(false)
     }
   };
 
@@ -33,6 +37,12 @@ const Notifications = () => {
     // navigation.navigate('RatingScreen', { notificationId });
     navigation.navigate('RatingScreen', {notificationId});
   };
+
+  if (isLoading) return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <ActivityIndicator />
+    </View>
+  )
 
   return (
     <View style={styles.container}>

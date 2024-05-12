@@ -16,6 +16,7 @@ const OrderPlacement = ({ route }) => {
   const [deliveryOptions, setDeliveryOptions] = useState('');
   const [serviceOrProduct, setServiceOrProduct] = useState('');
   const [technicianDetails, setTechnicianDetails] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
@@ -29,6 +30,7 @@ const OrderPlacement = ({ route }) => {
   const { selectedTechnician } = route.params;
 
   const handlePlaceOrder = async () => {
+    setIsLoading(true);
     try {
 
       if (!brand || !model || !issueDescription || !deliveryOptions || !serviceOrProduct) {
@@ -61,6 +63,8 @@ const OrderPlacement = ({ route }) => {
       setModalMessage('Error placing order. Please try again.');
       setModalButtonType('Cancel');
       setModalVisible(true);
+    } finally {
+      setIsLoading(false)
     }
   };
 
@@ -151,7 +155,7 @@ const OrderPlacement = ({ route }) => {
             {/* <Paragraph style={styles.technicianDetails}>Technician Location: {technicianDetails?.location}</Paragraph> */}
           </View>
 
-        <Button mode="contained" onPress={handlePlaceOrder} textColor="white">
+        <Button mode="contained" loading={isLoading} onPress={handlePlaceOrder} textColor="white">
           Place Order
         </Button>
       </View>

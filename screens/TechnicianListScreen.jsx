@@ -42,19 +42,20 @@ const TechnicianListScreen = ({ navigation }) => {
           <View style={styles.details}>
             <Title>{item.name}</Title>
             <Paragraph>Service Offered: {item.service}</Paragraph>
-            {item?.services?.map((service, index) => <Paragraph key={index}>{service}</Paragraph>)}
-            <Paragraph>Location: {item.address}</Paragraph>
+            {item?.services?.map((service, index) => <Paragraph key={index} style={{color: 'black', marginLeft: 20, fontWeight: 'bold'}}>{service}</Paragraph>)}
+            {/* <Paragraph>Location: {item.address}</Paragraph> */}
+            <Paragraph>Location: <Text style={{color: 'black', fontWeight: 'bold'}}>{item.address}</Text></Paragraph> 
           </View>
         </View>
         <View style={styles.ratingSection}>
-          <Text style={{marginLeft: 0, marginRight: 162}}>Ratings: </Text>
-          <Rating
+          {/* <Text style={{marginLeft: 0, marginRight: 162}}>Ratings: </Text> */}
+          {/* <Rating
             type='star'
             ratingCount={5}
             startingValue={item.rating}
             imageSize={20}
             readonly
-          />
+          /> */}
           {/* <IconButton
             icon="star"
             size={20}

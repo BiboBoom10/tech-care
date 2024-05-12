@@ -113,10 +113,10 @@ const handleAcceptOrder = async (orderId) => {
               <Text style={styles.infoTitle}>Delivery Options: </Text>
               {item.deliveryOptions}
             </Text>
-            <Text style={styles.infoText}>
+            {/* <Text style={styles.infoText}>
               <Text style={styles.infoTitle}>Phone Number: </Text>
               {item.phoneNumber}
-            </Text>
+            </Text> */}
             <Text style={styles.infoText}>
               <Text style={styles.infoTitle}>Service or Product: </Text>
               {item.serviceOrProduct}
@@ -166,12 +166,16 @@ const handleAcceptOrder = async (orderId) => {
   return (
     <View style={styles.container}>
       <Title style={styles.title}>Manage Orders</Title>
-      <FlatList
-        data={orders}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        style={styles.orderList}
-      />
+      {orders.length === 0? (
+        <Text style={{textAlign: 'center'}}>No orders</Text>
+      ): (
+        <FlatList
+          data={orders}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id}
+          style={styles.orderList}
+        />
+      )}
     </View>
   );
 };

@@ -10,6 +10,7 @@ const RecentBookings = () => {
   const [sortBy, setSortBy] = useState('day'); // Default sort by day
 
   const myBookings = async () => {
+    setIsLoading(true);
     try {
       const response = await axiosInstance.get('/auth/orders');
       const orders = response.data;
@@ -23,6 +24,8 @@ const RecentBookings = () => {
       setIsLoading(false); // Set loading state to false after data fetch
     } catch (error) {
       console.error('Error fetching orders:', error);
+    } finally {
+      setIsLoading(false)
     }
   }
 
